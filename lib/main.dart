@@ -48,7 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  // int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      // _counter++;
     });
   }
 
@@ -95,13 +95,38 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              'My Current Goals:',
+              style: Theme.of(context).textTheme.headline5,
             ),
+            Container(
+              // padding: const EdgeInsets.all(20), // Optional: Padding inside the container
+              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blue, // Color of the border
+                  width: 2, // Width of the border
+                ),
+                borderRadius: BorderRadius.circular(10), // Optional: Border radius
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: const [
+                    Text('Become financially aware'),
+                    Text('In progress'),
+                  ]),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: const [
+                    Text('Read 10 books on finances'),
+                    Text('Due 30 Dec 2024'),
+                  ])
+                ],
+              ),
+            )
           ],
         ),
       ),
