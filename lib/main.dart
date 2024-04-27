@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:goal_tracker_app/components/GoalList.dart';
+import 'package:goal_tracker_app/types/types.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,15 +51,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // int _counter = 0;
+  List<Goal> goals = [Goal(id: 1, title: 'My goal')];
+  late String newGoal;
 
-  void _incrementCounter() {
+  void addGoal(String newGoal) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      // _counter++;
+      goals.add(Goal(id: goals.length, title: newGoal));
+      print(goals);
     });
   }
 
@@ -78,63 +78,71 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'My Current Goals:',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Container(
-              // padding: const EdgeInsets.all(20), // Optional: Padding inside the container
-              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.blue, // Color of the border
-                  width: 2, // Width of the border
-                ),
-                borderRadius: BorderRadius.circular(10), // Optional: Border radius
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Invoke "debug painting" (press "p" in the console, choose the
+            // "Toggle Debug Paint" action from the Flutter Inspector in Android
+            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+            // to see the wireframe for each widget.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'My Current Goals:',
+                style: Theme.of(context).textTheme.headline5,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                    Text('Become financially aware'),
-                    Text('In progress'),
-                  ]),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                    Text('Read 10 books on finances'),
-                    Text('Due 30 Dec 2024'),
-                  ])
-                ],
-              ),
-            )
-          ],
+              Expanded(child: GoalList(goals: goals)),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Show dialog to add new goal
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Add Goal'),
+                  content: TextField(
+                    onChanged: (value) {
+                      // Update the newGoal variable when the TextField changes
+                      newGoal = value;
+                    },
+                    decoration: const InputDecoration(hintText: 'Enter your goal'),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // Add the new goal to the list
+                        addGoal(newGoal);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Add'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          child: const Icon(Icons.add),
+        ),
     );
   }
 }
